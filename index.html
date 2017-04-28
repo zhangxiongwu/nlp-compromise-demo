@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta name="apple-mobile-web-app-capable" content="no" />
+    <meta name="format-detection" content="telephone=no,email=no,adress=no"/>
+    <title>compromise Demo</title>
+    <!-- https://unpkg.com/compromise@latest/builds/compromise.min.js -->
+    <script type="text/javascript" src="compromise.min.js"></script>
+  </head>
+  <body style="font-size:13px;">
+    test nlp compromise
+
+    <br/>
+    <br/>
+    <textarea id="input1" onkeyup="deal(1)" style="border: 1px solid #000; width: 100%;" rows="1" cols="10">five hundred and twenty-seven</textarea>
+    转数字：<span id="result1"></span>
+    <hr>
+    <br/>
+
+    <textarea id="input2" onkeyup="deal(2)" style="border: 1px solid #000; width: 100%;" rows="2" cols="10">The stage was set for the Alan Parsons Project! Which I believe was some sort of hovercraft.</textarea>
+    把句子分开：<span id="result2"></span>
+    <hr>
+    <br/>
+
+    <textarea id="input3" onkeyup="deal(3)" style="border: 1px solid #000; width: 100%;" rows="1" cols="10">You have to find Jack and Tom</textarea>
+    统计句子中的人数：<span id="result3"></span>
+    <hr>
+    <br/>
+
+    <textarea id="input4" onkeyup="deal(4)" style="border: 1px solid #000; width: 100%;" rows="1" cols="10">Dear Miss Hoover, you have Lyme disease.</textarea>
+    转成反义句子：<span id="result4"></span>
+    <hr>
+    <br/>
+
+    <textarea id="input5" onkeyup="deal(5)" style="border: 1px solid #000; width: 100%;" rows="1" cols="10">Tony Hawk did a 900</textarea>
+    转换出人名代词：<span id="result5"></span>
+    <hr>
+    <br/>
+
+  </body>
+  <script>
+    function deal(position) {
+      var inputObj = document.getElementById('input' + position);
+      var outputObj = document.getElementById('result' + position);
+      var reStr = '';
+      var r = null;
+      var i = 0;
+      switch (position) {
+        case 1:
+            r = window.nlp(inputObj.value).values().toNumber();
+            reStr = r.out('text');
+          break;
+        case 2:
+          r = window.nlp(inputObj.value).data();
+          console.log(r);
+          for(i = 0; i < r.length; i++) {
+            reStr += i + ' : ' + r[i].text + ' ';
+          }
+          break;
+        case 3:
+          r = window.nlp(inputObj.value).people().length;
+          reStr = r;
+          break;
+        case 4:
+          r = window.nlp(inputObj.value).verbs().toNegative().out();
+          reStr = r;
+          break;
+        case 5:
+          r = window.nlp(inputObj.value).people().pronoun();
+          reStr = r;
+          break;
+      }
+      outputObj.innerHTML = reStr;
+    }
+    deal(1);
+    deal(2);
+    deal(3);
+    deal(4);
+    deal(5);
+  </script>
+</html>
